@@ -1,37 +1,96 @@
-import React, { useRef, useEffect } from "react";
-import { StyleSheet, ImageBackground, Text, TouchableOpacity, View, Animated } from "react-native";
+import React, { useRef, useEffect, useState } from "react";
+import {
+  StyleSheet,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+  Animated,
+  Modal,
+  FlatList,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Logo from "../components/Logo";
+import { useTranslation } from "react-i18next";
+import i18next from "../services/i18next";
+import translations from "../services/translations.json";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function HomeScreen({ navigation }) {
   const scaleValue = useRef(new Animated.Value(1)).current;
+  const { t } = useTranslation();
+  const [isVisible, setVisible] = useState(false);
+  const [language, setLanguage] = useState('')
+
+  useEffect(()=> { getData() }, [])
 
   useEffect(() => {
+    // Prevent the splash screen from auto-hiding
+    SplashScreen.preventAutoHideAsync()
+      .then((result) => {
+        // Add a delay of 2000 milliseconds (2 seconds)
+        setTimeout(() => {
+          // Manually hide the splash screen
+          SplashScreen.hideAsync()
+            .catch(console.error);
+        }, 2000); // Adjust the delay time as needed
+      })
+      .catch(console.error);
+  }, []);
+  useEffect(() => {
     const scaleIn = Animated.timing(scaleValue, {
-      toValue: 1.2, // Scale up to 1.2 times the original size
-      duration: 1000, // Animation duration (adjust as needed)
+      toValue: 1.2,
+      duration: 1000,
       useNativeDriver: true,
     });
 
     const scaleOut = Animated.timing(scaleValue, {
-      toValue: 1, // Scale back to the original size
-      duration: 1000, // Animation duration (adjust as needed)
+      toValue: 1,
+      duration: 1000,
       useNativeDriver: true,
     });
 
     const animateLoop = Animated.sequence([scaleIn, scaleOut]);
 
     const loop = Animated.loop(animateLoop);
-    loop.start(); // Start the animation loop
+    loop.start();
 
     return () => {
-      loop.stop(); // Stop the animation loop when the component unmounts
+      loop.stop();
     };
   }, []);
 
-  // Define a function to navigate to a specific screen when a button is pressed
   const navigateToScreen = (screenName) => {
     navigation.navigate(screenName);
+  };
+
+  const handleLanguageChange = (language) => {
+    i18next.changeLanguage(language);
+    storeData(language)
+    setLanguage(language)
+    setVisible(false); // Close the language selection modal
+  };
+
+  const getData = async () => {
+    try {
+      const lan = await AsyncStorage.getItem('language');
+      if(lan !== null){
+        setLanguage(lan)
+        handleLanguageChange(lan)
+      }
+    } catch (e) {
+    }
+  };
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('language', value);
+    } catch (e) {
+    }
   };
 
   return (
@@ -42,43 +101,78 @@ export default function HomeScreen({ navigation }) {
         style={styles.backgroundImage}
       >
         <Logo />
-
-        {/* Centered Button Container */}
         <View style={styles.centeredContainer}>
           <View style={styles.buttonContainer}>
-            <Animated.View style={[styles.button, { transform: [{ scale: scaleValue }] }]}>
+            <Animated.View
+              style={[styles.button, { transform: [{ scale: scaleValue }] }]}
+            >
               <TouchableOpacity
                 onPress={() => navigateToScreen("PlayerChoiceScreen")}
               >
-                <Text style={styles.buttonText}>Play Game</Text>
+                <Text style={styles.buttonText}>{t("play_game")}</Text>
               </TouchableOpacity>
             </Animated.View>
 
-            <Animated.View style={[styles.button, { transform: [{ scale: scaleValue }] }]}>
+            <Animated.View
+              style={[styles.button, { transform: [{ scale: scaleValue }] }]}
+            >
               <TouchableOpacity
                 onPress={() => navigateToScreen("HowToPlayScreen")}
               >
-                <Text style={styles.buttonText}>How To Play</Text>
+                <Text style={styles.buttonText}>{t("how_to_play")}</Text>
               </TouchableOpacity>
             </Animated.View>
 
-            <Animated.View style={[styles.button, { transform: [{ scale: scaleValue }] }]}>
-              <TouchableOpacity
-                onPress={() => navigateToScreen("SettingsScreen")}
-              >
-                <Text style={styles.buttonText}>Settings</Text>
+            <Animated.View
+              style={[styles.button, { transform: [{ scale: scaleValue }] }]}
+            >
+              <TouchableOpacity onPress={() => setVisible(true)}>
+                <Text style={styles.buttonText}>{t("language")}</Text>
               </TouchableOpacity>
             </Animated.View>
-            <Animated.View style={[styles.button, { transform: [{ scale: scaleValue }] }]}>
-              <TouchableOpacity
-                onPress={() => navigateToScreen("AboutScreen")}
-              >
-                <Text style={styles.buttonText}>About</Text>
+
+            <Animated.View
+              style={[styles.button, { transform: [{ scale: scaleValue }] }]}
+            >
+              <TouchableOpacity onPress={() => navigateToScreen("AboutScreen")}>
+                <Text style={styles.buttonText}>{t("about")}</Text>
               </TouchableOpacity>
             </Animated.View>
           </View>
         </View>
       </ImageBackground>
+
+      <Modal
+        visible={isVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setVisible(false)}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback onPress={() => null}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Choose a Language</Text>
+                <FlatList
+                  data={Object.keys(translations)} // Use translations object keys
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() => handleLanguageChange(item)}
+                    >
+                      <Text style={styles.languageText}>
+                        {translations[item].name}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                />
+                <TouchableOpacity onPress={() => setVisible(false)}>
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -95,8 +189,8 @@ const styles = StyleSheet.create({
   },
   centeredContainer: {
     flex: 1,
-    justifyContent: "center", // Center vertically
-    alignItems: "center", // Center horizontally
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonContainer: {
     alignItems: "center",
@@ -114,6 +208,35 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
-    textAlign: 'center'
+    textAlign: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    width: "100%",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
+  },
+  modalTitle: {
+    fontSize: 24,
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  languageText: {
+    fontSize: 18,
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  closeButtonText: {
+    fontSize: 18,
+    color: "blue",
+    textAlign: "center",
   },
 });

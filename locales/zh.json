@@ -1,0 +1,15 @@
+{
+    "play_game": "玩游戏",
+    "how_to_play": "怎么玩",
+    "language" : "语言",
+    "about" : "关于",
+    "choose_symbol" : "选择您的符号",
+    "loading" : "加载中",
+    "your_turn" : "到你了",
+    "cpu_turn" : "CPU转",
+    "you_win" : "你赢了",
+    "you_lose" : "你输了",
+    "draw" : "这是一个平局",
+    "play_again" : "再玩一次",
+    "home" : "家"
+}

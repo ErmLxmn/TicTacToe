@@ -8,7 +8,6 @@ import SettingsScreen from './screens/SettingsScreeen';
 import AboutScreen from './screens/AboutScreen';
 import PlayerChoiceScreen from './screens/PlayerChoiceScreen';
 import RandomPlayerScreen from './screens/RandomPlayerScreen';
-
 const Stack = createStackNavigator();
 
 export default function App() {

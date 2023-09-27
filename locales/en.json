@@ -1,0 +1,15 @@
+{
+    "play_game": "Play Game",
+    "how_to_play": "How To Play",
+    "language" : "Language",
+    "about" : "About",
+    "choose_symbol" : "Choose Your Symbol",
+    "loading" : "Loading",
+    "your_turn" : "Your Turn",
+    "cpu_turn" : "CPU turn",
+    "you_win" : "You Win",
+    "you_lose" : "You Lose",
+    "draw" : "It's a draw!",
+    "play_again" : "Play Again",
+    "home" : "Home"
+}
