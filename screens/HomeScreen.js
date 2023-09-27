@@ -29,18 +29,16 @@ export default function HomeScreen({ navigation }) {
   useEffect(()=> { getData() }, [])
 
   useEffect(() => {
-    // Prevent the splash screen from auto-hiding
     SplashScreen.preventAutoHideAsync()
       .then((result) => {
-        // Add a delay of 2000 milliseconds (2 seconds)
         setTimeout(() => {
-          // Manually hide the splash screen
           SplashScreen.hideAsync()
             .catch(console.error);
-        }, 2000); // Adjust the delay time as needed
+        }, 2000); 
       })
       .catch(console.error);
   }, []);
+  
   useEffect(() => {
     const scaleIn = Animated.timing(scaleValue, {
       toValue: 1.2,
