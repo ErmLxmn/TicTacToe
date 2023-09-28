@@ -198,13 +198,14 @@ export default function TicTacToeBoard({
         ? t("you_lose")
         : t("draw")
     } `;
+    setWinner(winner);
 
     if(winner === "draw"){
       setWinnerMessage(winnerMessage);
-      setShowModal(true);
+      // setShowModal(true);
       return;
     }
-    setWinner(winner);
+    
     setWinnerMessage(winnerMessage);
     checkWinningCell(winner, index, currentBoard);
     // setShowModal(true);
@@ -216,7 +217,7 @@ export default function TicTacToeBoard({
     const winCombinations = getWinningCombinations(winner, currentBoard);
     // Check if the current cellIndex is in the winning combination
     setWinningCombination(winCombinations);
-    setShowModal(true);
+    //setShowModal(true);
   };
 
   // Define the winning combinations based on the winner
