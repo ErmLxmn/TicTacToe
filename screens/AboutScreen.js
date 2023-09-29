@@ -2,8 +2,10 @@ import { StyleSheet, Text, View, ScrollView, ImageBackground } from "react-nativ
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import Logo from "../components/Logo";
+import { useTranslation } from "react-i18next";
 
 export default function AboutScreen() {
+  const { t } = useTranslation();
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -14,12 +16,7 @@ export default function AboutScreen() {
         <Logo />
       <ScrollView>
         <Text style={styles.aboutText}>
-          Welcome to the world of TicTacToe, where
-          classic gameplay meets modern technology! TicTacToe is a delightful
-          mobile game that brings the timeless fun of Tic-Tac-Toe to your
-          fingertips, with a fresh twist. Whether you're a casual gamer looking
-          for a quick distraction or a seasoned strategist aiming for the
-          perfect winning streak, this game has something for everyone.
+          {t("aboutScreen")}
         </Text>
       </ScrollView>
       </ImageBackground>
