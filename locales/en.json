@@ -33,16 +33,5 @@
     "play_again1": "Play Again (Optional):",
     "can_play": "7. You can play as many rounds as you like, switching the starting player each time.",
     "tic_tac_toe1": "Tic Tac Toe is a quick and straightforward game with limited possibilities, so it's possible for experienced players to reach a draw in most games. However, it's still a fun and engaging game to play with friends and family.",
-    "language": "Language",
-    "about": "About",
-    "choose_symbol": "Choose Your Symbol",
-    "loading": "Loading",
-    "your_turn": "Your Turn",
-    "cpu_turn": "CPU turn",
-    "you_win": "You Win",
-    "you_lose": "You Lose",
-    "draw": "It's a draw!",
-    "play_again": "Play Again",
-    "home": "Home",
     "aboutScreen": "Welcome to the world of TicTacToe, where classic gameplay meets modern technology! TicTacToe is a delightful mobile game that brings the timeless fun of Tic-Tac-Toe to your fingertips, with a fresh twist. Whether you're a casual gamer looking for a quick distraction or a seasoned strategist aiming for the perfect winning streak, this game has something for everyone."
 }
